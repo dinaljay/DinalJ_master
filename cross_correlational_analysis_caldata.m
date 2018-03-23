@@ -34,9 +34,9 @@ for cur_subj = subjects
    end
 end
 
-lag_store = LagDiffs(trimCal);
+% lag_store = LagDiffs(trimCal);
 % lag_store = LagDiffs(trimFrontal);
-% lag_store = LagDiffs(trimTemporal);
+lag_store = LagDiffs(trimTemporal);
 
 %% Histogram plot of number of patients with specific lag times
 
@@ -56,12 +56,21 @@ hold off
 %% Plot change in ARAT against change in lag
 
 figure 
+x = lag_store(:,numel(subjects));
+y = paperARATChange;
+% plot(lag_store(:,numel(subjects)),paperARATChange,'bo');
+%lsline
 
-plot(lag_store(:,numel(subjects)),paperARATChange,'bo');
-title('Alpha Band in Motor Cortex')
+temp = polyfit(x,y,1);
+f = polyval(temp,x);
+plot(x,y,'o',x,f,'-') 
+m = temp(1);
+c = temp(2);
+
+title('Delta Band in Temporal Cortex')
 xlabel('Median change in lag')
 ylabel('Change in ARAT')
-lsline
+legend('data','linear fit') 
 
 %%Calculating Lag Differences
 
