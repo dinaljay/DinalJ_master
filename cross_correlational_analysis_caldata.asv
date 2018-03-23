@@ -38,7 +38,7 @@ lag_store = LagDiffs(trimCal);
 % lag_store = LagDiffs(trimFrontal);
 % lag_store = LagDiffs(trimTemporal);
 
-%% Histogram plot of number of patients with specific lag times
+%% Histogram plot of number of patients with specific 
 
 figure
 histogram(lag_store(:,1:5),'BinWidth',5)
