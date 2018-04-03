@@ -1,7 +1,7 @@
 clear
 close all
 %% load data
-load('D:\Joey\ProcessedEEGData\FT_Elecs\MotorCal.mat');
+load('D:\Dinal\OrganizedCalibrationData\MotorCal.mat');
 
 %% create wavelets
 
