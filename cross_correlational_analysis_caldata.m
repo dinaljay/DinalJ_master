@@ -42,7 +42,7 @@ lag_store = LagDiffs(trimTemporal);
 
 figure
 histogram(lag_store(:,1:5),'BinWidth',5)
-title('Alpha Band in Motor Cortex')
+% title('Beta Band in Motor Cortex')
 xlabel('lag with bin width of 5')
 ylabel('No. of runs')
 hold on
@@ -104,7 +104,7 @@ for cur_subj = 1:numel(subjects)
         runID = runID+1;
         cur_sig = squeeze(signalMat{ptID}(:,:,run)); %define current signal
         out = gpu_gabor_response_span(cur_sig,cf,span,256); %gabor convolution
-        outEnv = squeeze((abs(out(:,:,:)))); %amplitude envelope calculation. for power, this would be squared
+        outEnv = squeeze((out(:,:,:))); %amplitude envelope calculation. for power, this would be squared
 
         ipsienv = outEnv(:,ipsichan(cur_subj)); %amplitude envelope for ipsi channel
         contraenv = outEnv(:,contrachan(cur_subj)); %amplitude envelope for contra channel

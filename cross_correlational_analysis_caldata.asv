@@ -35,14 +35,14 @@ for cur_subj = subjects
 end
 
 % lag_store = LagDiffs(trimCal);
-% lag_store = LagDiffs(trimFrontal);
-lag_store = LagDiffs(trimTemporal);
+lag_store = LagDiffs(trimFrontal);
+% lag_store = LagDiffs(trimTemporal);
 
 %% Histogram plot of number of patients with specific lag times
 
 figure
 histogram(lag_store(:,1:5),'BinWidth',5)
-title('Alpha Band in Motor Cortex')
+% title('Beta Band in Motor Cortex')
 xlabel('lag with bin width of 5')
 ylabel('No. of runs')
 hold on
@@ -67,7 +67,7 @@ plot(x,y,'o',x,f,'-')
 m = temp(1);
 c = temp(2);
 
-title('Alpha Band in Temporal Cortex')
+title('Beta Band in Frontal Cortex')
 xlabel('Median change in lag')
 ylabel('Change in ARAT')
 legend('data','linear fit') 
@@ -85,8 +85,8 @@ lag_store = zeros(10,11);
 s_i = 1;
 
 % Gabor wavelets
-fwhm = 4; %alpha = 4, beta = 8, delta = 2
-cf = 2; %change center frequencies for each band. alpha = 10, beta = 21, delta = 2
+fwhm = 8; %alpha = 4, beta = 8, delta = 2
+cf = 21; %change center frequencies for each band. alpha = 10, beta = 21, delta = 2
 span = fwhm2span(cf,fwhm);
 
 progressbar('Subjects','Runs')
@@ -104,7 +104,7 @@ for cur_subj = 1:numel(subjects)
         runID = runID+1;
         cur_sig = squeeze(signalMat{ptID}(:,:,run)); %define current signal
         out = gpu_gabor_response_span(cur_sig,cf,span,256); %gabor convolution
-        outEnv = squeeze((abs(out(:,:,:)))); %amplitude envelope calculation. for power, this would be squared
+        outEnv = squeeze((out(:,:,:))); %amplitude envelope calculation. for power, this would be squared
 
         ipsienv = outEnv(:,ipsichan(cur_subj)); %amplitude envelope for ipsi channel
         contraenv = outEnv(:,contrachan(cur_subj)); %amplitude envelope for contra channel
