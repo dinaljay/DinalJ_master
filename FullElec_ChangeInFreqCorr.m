@@ -208,14 +208,14 @@ ylabel('Change in ARAT')
 [r p] = corr(Ttheta,paperARATChange);
 sprintf('Temporal Electrode Theta Connectivity Change Correlation with ARAT Change: \nr = %5.4f, p = %5.4f',r,p)
 
-function [ span ] = fwhm2span( cf,fwhm )
-%FWHM2SPAN Summary of this function goes here
-%   Detailed explanation goes here
-
-span= (cf./(2*pi))./(fwhm./ (2*sqrt(2*log(2))));
-
-
-end
+% function [ span ] = fwhm2span( cf,fwhm )
+% %FWHM2SPAN Summary of this function goes here
+% %   Detailed explanation goes here
+% 
+% span= (cf./(2*pi))./(fwhm./ (2*sqrt(2*log(2))));
+% 
+% 
+% end
 
 function corrDiffs = CorrChange(signalMat)
 
