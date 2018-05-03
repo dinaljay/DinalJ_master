@@ -155,39 +155,44 @@ for ptInd = 1:numel(subjects)
     end
 end
 
-save(fullfile(saveDir,saveFile),'cellArray','cf','fwhm','meta');
+% save(fullfile(saveDir,saveFile),'cellArray','cf','fwhm','meta');
+
+%% Create mean and median arrays
+
+for ptInd = 1:numel(subjects)
+    for lobeInd = 1:numel(lobeList)
+        for stageInd = 1:numel(stageList)
+            for runInd = 1:10
+                
+                meanArray{ptInd, lobeInd, stageInd, runInd} = mean(mean(cellArray{ptInd,lobeInd,stageInd,runInd}));
+                medianArray{ptInd, lobeInd, stageInd, runInd} = median(median(cellArray{ptInd,lobeInd,stageInd,runInd}));
+                
+            end
+        end
+        
+    end
+end
 
 %% Histogram plot of number of patients with specific lag times
+for lobeInd = 1:numel(lobeList)
+    for stageInd = 1:numel(stageList)
+       
+        figure
+        val1 = meanArray{:,lobeInd,stageInd,1:5};
+        histogram(val1,'BinWidth',0.001)
+        % title('Beta Band in Motor Cortex')
+        title(sprintf('%s Cortex %s Stage using mean lag time', lobeList{lobeInd}, stageList{stageInd}))
+        xlabel('lag with bin width of 0.001 seconds')
+        ylabel('No. of runs')
+        
+        hold on
+        
+        val2 = meanArray{:,lobeInd,stageInd,6:10};
+        histogram(val2,'BinWidth',0.001)
+        legend('First 5 runs','Last 5 runs')
+        hold off
+        
+%         [H,P,CI,STATS] = ttest(meanArray{:,lobeInd,stageInd,1:5},meanArray{:,lobeInd,stageInd,6:10});
+    end
 
-figure
-histogram(lag_store(:,1:5),'BinWidth',5)
-% title('Beta Band in Motor Cortex')
-xlabel('lag with bin width of 5')
-ylabel('No. of runs')
-hold on
-
-histogram(lag_store(:,6:10),'BinWidth',5)
-legend('First 5 runs','Last 5 runs')
-hold off
-
-[H,P,CI,STATS] = ttest(lag_store(1:50),lag_store(51:100));
-
-%% Plot change in ARAT against change in lag
-
-figure 
-x = lag_store(:,numel(subjects));
-y = paperARATChange;
-% plot(lag_store(:,numel(subjects)),paperARATChange,'bo');
-%lsline
-
-temp = polyfit(x,y,1);
-f = polyval(temp,x);
-plot(x,y,'o',x,f,'-') 
-m = temp(1);
-c = temp(2);
-
-title('Alpha Band in Frontal Cortex')
-xlabel('Median change in lag')
-ylabel('Change in ARAT')
-legend('data','linear fit') 
-
+end
