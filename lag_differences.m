@@ -137,8 +137,8 @@ for ptInd = 1:numel(subjects)
                         ipsiBandData = ipsiBandData.raw();
                         contraBandData = contraBandData.raw();
                         
-                        ipsiEnv = abs(ipsiBandData);        %Contralateral amplitude envelope calculation
-                        contraEnv = abs(contraBandData);    %Ipsilateral amplitude envelope calculation
+                        ipsiEnv = (abs(ipsiBandData).^2);        %Contralateral amplitude envelope calculation
+                        contraEnv = (abs(contraBandData).^2);    %Ipsilateral amplitude envelope calculation
                         
                         [r, lagTemp] = xcorr(ipsiEnv,contraEnv); %cross correlational analysis of envelopes
                         [~,I] = max(abs(r));
@@ -178,26 +178,119 @@ for ptInd = 1:numel(subjects)
     end
 end
 
-%% Histogram plot of number of patients with specific lag times
+% Histogram plot of number of patients with specific lag times
+pVal = nan(numel(lobeList),numel(stageList));
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
-       
+        
         figure
-        val1 = meanArray{:,lobeInd,stageInd,1:5};
-        histogram(val1,'BinWidth',0.001)
-        % title('Beta Band in Motor Cortex')
-        title(sprintf('%s Cortex %s Stage using mean lag time', lobeList{lobeInd}, stageList{stageInd}))
+        val1 = [];
+        for pt = 1:9
+            for run = 1:5
+                val1 = [val1 meanDeltaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        histogram(val1,'BinWidth',0.05)
+        title('Beta Band in Motor Cortex')
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
         xlabel('lag with bin width of 0.001 seconds')
         ylabel('No. of runs')
         
         hold on
         
-        val2 = meanArray{:,lobeInd,stageInd,6:10};
-        histogram(val2,'BinWidth',0.001)
+        val2 = [];
+        for pt = 1:9
+            for run = 6:10
+                val2 = [val2 meanDeltaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        
+        text(0.1,0.8,['p = ' num2str(p)],'Units','normalized');
+        histogram(val2,'BinWidth',0.05)
         legend('First 5 runs','Last 5 runs')
         hold off
         
-%         [H,P,CI,STATS] = ttest(meanArray{:,lobeInd,stageInd,1:5},meanArray{:,lobeInd,stageInd,6:10});
+        [h,p] = ttest2(val1,val2);
+        %         p = ranksum(val1,val2);
+        pVal(lobeInd,stageInd) = p;
     end
+    
+end
 
+pVal = nan(numel(lobeList),numel(stageList));
+for lobeInd = 1:numel(lobeList)
+    for stageInd = 1:numel(stageList)
+        
+        figure
+        val1 = [];
+        for pt = 1:9
+            for run = 1:5
+                val1 = [val1 meanAlphaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        histogram(val1,'BinWidth',0.5)
+        title('Beta Band in Motor Cortex')
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
+        xlabel('lag with bin width of 0.001 seconds')
+        ylabel('No. of runs')
+        
+        hold on
+        
+        val2 = [];
+        for pt = 1:9
+            for run = 6:10
+                val2 = [val2 meanAlphaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        
+        text(0.1,0.8,['p = ' num2str(p)],'Units','normalized');
+        histogram(val2,'BinWidth',0.5)
+        legend('First 5 runs','Last 5 runs')
+        hold off
+        
+        [h,p] = ttest2(val1,val2);
+        %         p = ranksum(val1,val2);
+        pVal(lobeInd,stageInd) = p;
+        
+    end
+    
+end
+
+pVal = nan(numel(lobeList),numel(stageList));
+for lobeInd = 1:numel(lobeList)
+    for stageInd = 1:numel(stageList)
+        
+        figure
+        val1 = [];
+        for pt = 1:9
+            for run = 1:5
+                val1 = [val1 meanBetaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        histogram(val1,'BinWidth',0.01)
+        title('Beta Band in Motor Cortex')
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
+        xlabel('lag with bin width of 0.01 seconds')
+        ylabel('No. of runs')
+        
+        hold on
+        
+        val2 = [];
+        for pt = 1:9
+            for run = 6:10
+                val2 = [val2 meanBetaArray{pt,lobeInd,stageInd,run}];
+            end
+        end
+        
+        [h,p] = ttest2(val1,val2);
+        %         p = ranksum(val1,val2);
+        pVal(lobeInd,stageInd) = p;
+        %
+        text(0.1,0.8,['p = ' num2str(p)],'Units','normalized');
+        histogram(val2,'BinWidth',0.01)
+        legend('First 5 runs','Last 5 runs')
+        hold off
+        
+    end
+    
 end
