@@ -163,9 +163,14 @@ for ptInd = 1:numel(subjects)
     for lobeInd = 1:numel(lobeList)
         for stageInd = 1:numel(stageList)
             for runInd = 1:10
+                                
+                meanDeltaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,1));
+                meanAlphaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,2));
+                meanBetaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,3));
                 
-                meanArray{ptInd, lobeInd, stageInd, runInd} = mean(mean(cellArray{ptInd,lobeInd,stageInd,runInd}));
-                medianArray{ptInd, lobeInd, stageInd, runInd} = median(median(cellArray{ptInd,lobeInd,stageInd,runInd}));
+                medianDeltaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,1));
+                medianAlphaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,2));
+                medianBetaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,3));
                 
             end
         end
