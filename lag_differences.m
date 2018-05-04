@@ -192,8 +192,8 @@ for lobeInd = 1:numel(lobeList)
         end
         histogram(val1,'BinWidth',0.05)
         title('Beta Band in Motor Cortex')
-        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
-        xlabel('lag with bin width of 0.001 seconds')
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in Delta band', lobeList{lobeInd}, stageList{stageInd}))
+        xlabel('lag with bin width of 0.05 seconds')
         ylabel('No. of runs')
         
         hold on
@@ -230,8 +230,8 @@ for lobeInd = 1:numel(lobeList)
         end
         histogram(val1,'BinWidth',0.5)
         title('Beta Band in Motor Cortex')
-        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
-        xlabel('lag with bin width of 0.001 seconds')
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in Alpha band', lobeList{lobeInd}, stageList{stageInd}))
+        xlabel('lag with bin width of 0.5 seconds')
         ylabel('No. of runs')
         
         hold on
@@ -269,7 +269,7 @@ for lobeInd = 1:numel(lobeList)
         end
         histogram(val1,'BinWidth',0.01)
         title('Beta Band in Motor Cortex')
-        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in delta band', lobeList{lobeInd}, stageList{stageInd}))
+        title(sprintf('%s Cortex in %s Stage using mean lag time across trials in Beta band', lobeList{lobeInd}, stageList{stageInd}))
         xlabel('lag with bin width of 0.01 seconds')
         ylabel('No. of runs')
         
