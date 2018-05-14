@@ -290,6 +290,7 @@ for lobeInd = 1:numel(lobeList)
 end
 
 %% Plot change in ARAT against change in lag
+
 %Delta Band data
 paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
 
@@ -304,23 +305,24 @@ for lobeInd = 1:numel(lobeList)
             
         end
         
+        figure
         x = val1;
-        y = paperARATChange;        
+        y = paperARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        m = temp(1);
-        c = temp(2);
         
         title(sprintf('%s Cortex in %s Stage in Delta band', lobeList{lobeInd}, stageList{stageInd}))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
+        text(0.1,0.8,['p = ' num2str(pDelta(lobeInd, stageInd))],'Units','normalized');
         
     end
 end
 
 %Alpha Band data
+paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
 
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
@@ -333,23 +335,26 @@ for lobeInd = 1:numel(lobeList)
             
         end
         
+        figure
         x = val1;
-        y = paperARATChange;        
+        y = paperARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        m = temp(1);
-        c = temp(2);
         
         title(sprintf('%s Cortex in %s Stage in Alpha band', lobeList{lobeInd}, stageList{stageInd}))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
+        text(0.1,0.8,['p = ' num2str(pAlpha(lobeInd, stageInd))],'Units','normalized');
+        
         
     end
 end
 
 %Beta Band data
+paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
+
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
         
@@ -361,18 +366,19 @@ for lobeInd = 1:numel(lobeList)
             
         end
         
+        figure
         x = val1;
-        y = paperARATChange;        
+        y = paperARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        m = temp(1);
-        c = temp(2);
         
         title(sprintf('%s Cortex in %s Stage in Beta band', lobeList{lobeInd}, stageList{stageInd}))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
+        text(0.1,0.8,['p = ' num2str(pBeta(lobeInd, stageInd))],'Units','normalized');
+        
         
     end
 end
