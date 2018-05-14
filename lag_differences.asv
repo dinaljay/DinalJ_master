@@ -22,6 +22,7 @@ subjects = [1 3 7 9 11 12 13 17 22];
 
 cellArray = cell(numel(subjects),numel(lobeList),numel(stageList),10);
 
+
 cf = [2, 10, 21];
 fwhm = [2, 4, 8];
 meta.Order = {'Patient','Lobe','Stage','Run'};
@@ -165,7 +166,11 @@ for ptInd = 1:numel(subjects)
                                 
                 meanDeltaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,1));
                 meanAlphaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,2));
-                meanBetaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,3));               
+                meanBetaArray{ptInd, lobeInd, stageInd, runInd} = mean(cellArray{ptInd,lobeInd,stageInd,runInd}(:,3));
+                
+                medianDeltaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,1));
+                medianAlphaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,2));
+                medianBetaArray{ptInd, lobeInd, stageInd, runInd} = median(cellArray{ptInd,lobeInd,stageInd,runInd}(:,3));
                 
             end
         end
@@ -173,7 +178,7 @@ for ptInd = 1:numel(subjects)
     end
 end
 
-%% Histogram plot of number of patients with specific lag times
+% Histogram plot of number of patients with specific lag times
 pDelta = nan(numel(lobeList),numel(stageList));
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
@@ -320,59 +325,4 @@ for lobeInd = 1:numel(lobeList)
     end
 end
 
-%Alpha Band data
 
-for lobeInd = 1:numel(lobeList)
-    for stageInd = 1:numel(stageList)
-        
-        val1 = [];
-        for pt = 1:9
-            run_holder = [];
-            run_holder = [run_holder meanAlphaArray{pt,lobeInd,stageInd,6:10}];
-            val1 = [val1 nanmean(run_holder)];
-            
-        end
-        
-        x = val1;
-        y = paperARATChange;        
-        temp = polyfit(x,y,1);
-        f = polyval(temp,x);
-        plot(x,y,'o',x,f,'-')
-        m = temp(1);
-        c = temp(2);
-        
-        title(sprintf('%s Cortex in %s Stage in Alpha band', lobeList{lobeInd}, stageList{stageInd}))
-        xlabel('Mean change in lag')
-        ylabel('Change in ARAT')
-        legend('data','linear fit')
-        
-    end
-end
-
-%Beta Band data
-for lobeInd = 1:numel(lobeList)
-    for stageInd = 1:numel(stageList)
-        
-        val1 = [];
-        for pt = 1:9
-            run_holder = [];
-            run_holder = [run_holder meanBetaArray{pt,lobeInd,stageInd,6:10}];
-            val1 = [val1 nanmean(run_holder)];
-            
-        end
-        
-        x = val1;
-        y = paperARATChange;        
-        temp = polyfit(x,y,1);
-        f = polyval(temp,x);
-        plot(x,y,'o',x,f,'-')
-        m = temp(1);
-        c = temp(2);
-        
-        title(sprintf('%s Cortex in %s Stage in Beta band', lobeList{lobeInd}, stageList{stageInd}))
-        xlabel('Mean change in lag')
-        ylabel('Change in ARAT')
-        legend('data','linear fit')
-        
-    end
-end
