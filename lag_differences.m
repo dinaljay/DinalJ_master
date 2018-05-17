@@ -136,10 +136,10 @@ for ptInd = 1:numel(subjects)
                         ipsiBandData = ipsiBandData.raw();
                         contraBandData = contraBandData.raw();
                         
-%                         ipsiEnv = abs(ipsiBandData);        %Contralateral amplitude envelope calculation
-%                         contraEnv = abs(contraBandData);    %Ipsilateral amplitude envelope calculation
+                        ipsiEnv = (abs(ipsiBandData)).^2;        %Contralateral amplitude envelope calculation
+                        contraEnv = (abs(contraBandData)).^2;    %Ipsilateral amplitude envelope calculation
                         
-                        [r, lagTemp] = xcorr(ipsiBandData,contraBandData); %cross correlational analysis of envelopes
+                        [r, lagTemp] = xcorr(ipsiEnv,contraEnv); %cross correlational analysis of envelopes
                         [~,I] = max(abs(r));
                         lagArray(block,band) = lagTemp(I)/ipsiRunBlock.samplingRate();
                     end
@@ -173,7 +173,7 @@ for ptInd = 1:numel(subjects)
     end
 end
 
-%% Histogram plot of number of patients with specific lag times
+% Histogram plot of number of patients with specific lag times
 pDelta = nan(numel(lobeList),numel(stageList));
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
@@ -206,7 +206,7 @@ for lobeInd = 1:numel(lobeList)
         legend('First 5 runs','Last 5 runs')
         hold off
         
-        %         p = ranksum(val1,val2);
+                p = ranksum(val1,val2);
         pDelta(lobeInd,stageInd) = p;
     end
     
@@ -244,7 +244,7 @@ for lobeInd = 1:numel(lobeList)
         legend('First 5 runs','Last 5 runs')
         hold off
         
-        %         p = ranksum(val1,val2);
+                p = ranksum(val1,val2);
         pAlpha(lobeInd,stageInd) = p;
         
     end
@@ -277,9 +277,9 @@ for lobeInd = 1:numel(lobeList)
         end
         
         [h,p] = ttest2(val1,val2);
-        %         p = ranksum(val1,val2);
+                p = ranksum(val1,val2);
         pBeta(lobeInd,stageInd) = p;
-        %
+        
         text(0.1,0.8,['p = ' num2str(p)],'Units','normalized');
         histogram(val2,'BinWidth',0.05)
         legend('First 5 runs','Last 5 runs')
@@ -291,9 +291,14 @@ end
 
 %% Plot change in ARAT against change in lag
 
-%Delta Band data
-paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
 
+ARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
+subjects = [1 3 7 9 11 12 13 17 22];
+
+Scorr = nan(numel(lobeList),numel(stageList));
+Pcorr = nan(numel(lobeList),numel(stageList));
+
+%Delta Band data
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
         
@@ -304,25 +309,30 @@ for lobeInd = 1:numel(lobeList)
             val1 = [val1 nanmean(run_holder)];
             
         end
+                    
+        [Srho,Spval] = corr(val1', ARATChange', 'Type', 'Spearman');
+        [Prho,Ppval] = corr(val1', ARATChange', 'Type', 'Pearson');        
+       
+        Scorr(lobeInd,stageInd) = Srho;
+        Pcorr(lobeInd,stageInd) = Prho;
         
         figure
         x = val1;
-        y = paperARATChange;
+        y = ARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        
-        title(sprintf('%s Cortex in %s Stage in Delta band', lobeList{lobeInd}, stageList{stageInd}))
+                
+        title(sprintf('%s Cortex, %s Stage, Delta band, Spearman coeff = %.3f', lobeList{lobeInd}, stageList{stageInd},Scorr(lobeInd, stageInd)))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
-        text(0.1,0.8,['p = ' num2str(pDelta(lobeInd, stageInd))],'Units','normalized');
-        
+%         text(0.1, 0.8, ['Spearman Rank Correlation Coefficient = ' num2str(SpDelta(lobeInd, stageInd))],'Units','normalized');
+  
     end
 end
 
-%Alpha Band data
-paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
+%Alpha Band Data
 
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
@@ -334,27 +344,30 @@ for lobeInd = 1:numel(lobeList)
             val1 = [val1 nanmean(run_holder)];
             
         end
+                    
+        [Srho,Spval] = corr(val1', ARATChange', 'Type', 'Spearman');
+        [Prho,Ppval] = corr(val1', ARATChange', 'Type', 'Pearson');        
+       
+        Scorr(lobeInd,stageInd) = Srho;
+        Pcorr(lobeInd,stageInd) = Prho;
         
         figure
         x = val1;
-        y = paperARATChange;
+        y = ARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        
-        title(sprintf('%s Cortex in %s Stage in Alpha band', lobeList{lobeInd}, stageList{stageInd}))
+                
+        title(sprintf('%s Cortex, %s Stage, Alpha band, Spearman coeff = %.3f', lobeList{lobeInd}, stageList{stageInd},Scorr(lobeInd, stageInd)))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
-        text(0.1,0.8,['p = ' num2str(pAlpha(lobeInd, stageInd))],'Units','normalized');
-        
-        
+%         text(0.1, 0.8, ['Spearman Rank Correlation Coefficient = ' num2str(SpDelta(lobeInd, stageInd))],'Units','normalized');
+  
     end
 end
 
 %Beta Band data
-paperARATChange = [12.5 0.5 8 6 2 6 1 7 5.5];
-
 for lobeInd = 1:numel(lobeList)
     for stageInd = 1:numel(stageList)
         
@@ -365,20 +378,27 @@ for lobeInd = 1:numel(lobeList)
             val1 = [val1 nanmean(run_holder)];
             
         end
+                    
+        [Srho,Spval] = corr(val1', ARATChange', 'Type', 'Spearman');
+        [Prho,Ppval] = corr(val1', ARATChange', 'Type', 'Pearson');        
+       
+        Scorr(lobeInd,stageInd) = Srho;
+        Pcorr(lobeInd,stageInd) = Prho;
         
         figure
         x = val1;
-        y = paperARATChange;
+        y = ARATChange;
         temp = polyfit(x,y,1);
         f = polyval(temp,x);
         plot(x,y,'o',x,f,'-')
-        
-        title(sprintf('%s Cortex in %s Stage in Beta band', lobeList{lobeInd}, stageList{stageInd}))
+                
+        title(sprintf('%s Cortex, %s Stage, Beta band, Spearman coeff = %.3f', lobeList{lobeInd}, stageList{stageInd},Scorr(lobeInd, stageInd)))
         xlabel('Mean change in lag')
         ylabel('Change in ARAT')
         legend('data','linear fit')
-        text(0.1,0.8,['p = ' num2str(pBeta(lobeInd, stageInd))],'Units','normalized');
-        
-        
+%         text(0.1, 0.8, ['Spearman Rank Correlation Coefficient = ' num2str(SpDelta(lobeInd, stageInd))],'Units','normalized');
+  
     end
 end
+
+
